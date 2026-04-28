@@ -1,19 +1,30 @@
-.app {
-    position: fixed;
-    width: 100%;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
     height: 100%;
-    max-width: 700px;
+    overflow: hidden;
+    font-family: 'Lilita One', Arial, sans-serif;
+}
+
+.app {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
     background: #ffffff;
-    border-left: 1px solid #eeeeee;
-    border-right: 1px solid #eeeeee;
-}   
+}
 
 .app > .screen {
     display: none;
 }
 
 .app > .screen.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
 }
