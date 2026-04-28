@@ -14,33 +14,41 @@
 
 .screen h2 {
     margin-bottom: 20px;
-    font-size: 30px;
+    font-size: 28px;
     color: #111111;
     border-bottom: 4px solid #444444;
     padding: 5px 0px;
     display: inline-block;
 }
 
-.screen .form-input label {
-    display: block;
-    margin-bottom: 5px;
+.logo-inline {
+    width: 32px;
+    vertical-align: middle;
+    border-radius: 50%;
 }
 
 .screen .form-input input {
     width: 100%;
-    padding: 10px;
-    margin: 5px;
+    padding: 10px 15px;
     border: 1px solid #555555;
-    font-size: 16px;
     border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+    font-family: 'Lilita One', Arial, sans-serif;
+}
+
+.screen .form-input input:focus {
+    border: 2px solid #111111;
 }
 
 .screen .form-input button {
-    padding: 10px 20px;
+    padding: 10px 24px;
     background: #111111;
     color: #eeeeee;
     font-size: 16px;
     cursor: pointer;
     outline: none;
     border: none;
+    border-radius: 6px;
+    font-family: 'Lilita One', Arial, sans-serif;
 }

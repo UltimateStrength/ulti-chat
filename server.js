@@ -1,7 +1,6 @@
 /* ===============================
-   Constantes / Imports
+   Imports
 ================================ */
-
 const express = require("express");
 const path = require("path");
 const http = require("http");
@@ -10,63 +9,93 @@ const { Server } = require("socket.io");
 /* ===============================
    Inicialização
 ================================ */
-
 const app = express();
 const server = http.createServer(app);
-
-// Socket.IO
 const io = new Server(server);
-
-/* ===============================
-   Porta (Render / Railway / Local)
-================================ */
 
 const PORT = process.env.PORT || 1234;
 
-/* ===============================
-   Arquivos estáticos
-================================ */
-
-const publicDirectoryPath = path.join(__dirname, "public");
-app.use(express.static(publicDirectoryPath));
+app.use(express.static(path.join(__dirname, "public")));
 
 /* ===============================
-   Socket.IO - Chat
+   Estado dos usuários online
 ================================ */
 
+// Map: socketId -> { username, color, avatar }
+const onlineUsers = new Map();
+
+function broadcastUserList() {
+    const list = Array.from(onlineUsers.values());
+    io.emit("userlist", list);
+}
+
+/* ===============================
+   Socket.IO
+================================ */
 io.on("connection", (socket) => {
 
-    socket.on("newuser", (username) => {
+    // Usuário entrou — recebe perfil completo
+    socket.on("newuser", ({ username, color, avatar }) => {
+        onlineUsers.set(socket.id, { username, color, avatar });
         socket.broadcast.emit("update", `${username} entrou na conversa!`);
-        console.log(`${username} entrou`);
+        broadcastUserList();
+        console.log(`[+] ${username} conectou (${socket.id})`);
     });
 
-    socket.on("exituser", (username) => {
-        socket.broadcast.emit("update", `${username} saiu da conversa!`);
-        console.log(`${username} saiu`);
+    // Usuário atualizou perfil (cor ou avatar)
+    socket.on("updateprofile", ({ color, avatar }) => {
+        const user = onlineUsers.get(socket.id);
+        if (!user) return;
+        if (color) user.color = color;
+        if (avatar) user.avatar = avatar;
+        onlineUsers.set(socket.id, user);
+        broadcastUserList();
     });
 
+    // Mensagem de texto
     socket.on("chat", (message) => {
         socket.broadcast.emit("chat", message);
-        console.log("Mensagem:", message);
     });
 
+    // Imagem — inclui username e avatar pra renderizar corretamente
     socket.on("image", (data) => {
-        io.emit("image", data);
-        console.log("Imagem recebida");
+        // Emite pra todos incluindo quem enviou (io.emit),
+        // mas marca se é o próprio usuário no cliente
+        socket.broadcast.emit("image", data);
+        // Emite de volta pro remetente com flag "my"
+        socket.emit("image-sent", data);
+    });
+
+    // Áudio
+    socket.on("audio", (data) => {
+        socket.broadcast.emit("audio", data);
+        socket.emit("audio-sent", data);
+    });
+
+    // Saída
+    socket.on("exituser", (username) => {
+        onlineUsers.delete(socket.id);
+        socket.broadcast.emit("update", `${username} saiu da conversa!`);
+        broadcastUserList();
+        console.log(`[-] ${username} desconectou`);
+    });
+
+    // Desconexão inesperada (fechou a aba, etc.)
+    socket.on("disconnect", () => {
+        const user = onlineUsers.get(socket.id);
+        if (user) {
+            onlineUsers.delete(socket.id);
+            socket.broadcast.emit("update", `${user.username} saiu da conversa!`);
+            broadcastUserList();
+            console.log(`[-] ${user.username} desconectou (inesperado)`);
+        }
     });
 
 });
 
 /* ===============================
-   Start do Servidor
+   Start
 ================================ */
-
 server.listen(PORT, "0.0.0.0", () => {
-    console.log(`
-==========================================
-Servidor iniciado com sucesso 🚀
-Porta: ${PORT}
-==========================================
-`);
+    console.log(`\n==========================================\nServidor rodando na porta ${PORT}\n==========================================\n`);
 });
