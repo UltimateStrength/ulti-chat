@@ -1,73 +1,65 @@
-# 💬 Sala de Chat em Tempo Real (Node.js + Socket.IO)
+# 💬 UltiChat
 
-Um chat em tempo real desenvolvido com **Node.js**, **Express** e **Socket.IO**, com suporte a **mensagens de texto**, **envio de imagens** e **nome de usuário personalizado**.
+Chat em tempo real com suporte a texto, imagem e áudio — rodando com Node.js e Socket.IO.
 
-O projeto evoluiu de um chat restrito a `localhost` para uma aplicação **online**, acessível por qualquer pessoa através de um **link público**, sem necessidade de estar na mesma rede.
+## ✨ Funcionalidades
 
-Para acessar utilize <a href="sala-de-chat.onrender.com/" target="_blank" rel="noopener noreferrer">
-  este link
-</a>
-👾
----
+- Entrar com nickname personalizado
+- Cor do nome configurável por usuário
+- Foto de perfil com crop automático 1:1
+- Mensagens de texto (Enter ou botão)
+- Envio de imagens (redimensionadas automaticamente)
+- Gravação e envio de áudio direto pelo navegador
+- Player de áudio customizado com waveform visual
+- Mensagens alinhadas por autor (esquerda/direita)
+- Lista de usuários online em tempo real
+- Layout responsivo com painéis colapsáveis no mobile
 
-## 🚀 Principais Funcionalidades
+## 🖥️ Preview
 
-- ✅ Chat em tempo real via **WebSocket (Socket.IO)**
-- 🧑 Definição de nome de usuário
-- 💬 Envio e recebimento de mensagens de texto
-- 🖼️ Envio e exibição de imagens no chat
-- 🌐 Acesso remoto (não depende da mesma rede)
-- 📁 Servidor de arquivos estáticos com Express
-- ⚡ Deploy com **Render**
-- 🔄 Integração com **GitHub Actions (Node.js CI)**
+> Chat com painel de perfil à esquerda, mensagens ao centro e lista de online à direita.
 
----
+## 🚀 Como rodar localmente
 
-## 🧠 Contexto do Projeto
+```bash
+git clone https://github.com/UltimateStrength/ulti-chat.git
+cd ulti-chat
+npm install
+npm start
+```
 
-O modelo antigo deste chat funcionava **apenas em ambiente local (`localhost`)**.  
-Para que outras pessoas pudessem acessar, era necessário:
+Acesse em: `http://localhost:1234`
 
-- Estar na **mesma rede**
-- Ou utilizar soluções como **Radmin VPN** ou **ZeroTier One**
+## 🗂️ Estrutura
 
-Com a nova arquitetura:
-- Uso de **GitHub Actions (workflows Node.js)** para validação do código
-- Hospedagem do servidor via **Render**
-- Porta exposta corretamente com `process.env.PORT`
+```
+ulti-chat/
+├── public/
+│   └── assets/
+│       ├── images/        # Ícones e imagens do app
+│       ├── scripts/
+│       │   ├── main-code.js          # Lógica do cliente
+│       │   └── inspect-block-filter.js
+│       └── styles/
+│           ├── app.css
+│           ├── chat-screen.css
+│           ├── hovers.css
+│           └── screen.css
+│   └── index.html
+├── server.js              # Servidor Node + Socket.IO
+├── package.json
+└── .gitignore
+```
 
-Agora o chat funciona **online**, com **link próprio**, acessível de qualquer lugar 🌍
+## 🛠️ Tecnologias
 
----
+- Node.js
+- Express
+- Socket.IO
+- HTML / CSS / JavaScript vanilla
 
-## 🛠️ Tecnologias Utilizadas
+## 📌 Observações
 
-- **Node.js**
-- **Express**
-- **Socket.IO**
-- **HTML5**
-- **CSS3**
-- **JavaScript**
-- **GitHub Actions**
-- **Render**
-
----
-
-## 📂 Estrutura do Projeto
-
-```txt
-Sala-de-Chat/
-├─ .github/
-│  └─ workflows/
-│     └─ node.js.yml
-├─ public/
-│  ├─ assets/
-│  ├─ index.html
-│  ├─ code.js
-│  ├─ style.css
-│  └─ main-style.css
-├─ server.js
-├─ package.json
-├─ package-lock.json
-├─ database.json
-└─ README.md
+- Sem banco de dados — o histórico não persiste entre sessões
+- Avatares e áudios trafegam como base64 via socket (recomendado para uso local/LAN)
+- Deploy possível via [Render](https://render.com) ou Railway
