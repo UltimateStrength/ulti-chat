@@ -1,56 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/main-style.css">
+    <link href="https://fonts.cdnfonts.com/css/lilita-one" rel="stylesheet">
     <link rel="stylesheet" href="/assets/styles/app.css">
     <link rel="stylesheet" href="/assets/styles/screen.css">
     <link rel="stylesheet" href="/assets/styles/chat-screen.css">
     <link rel="stylesheet" href="/assets/styles/hovers.css">
 
-    <link href="https://fonts.cdnfonts.com/css/lilita-one" rel="stylesheet">
-
-    <link rel="icon" href="https://i.imgur.com/zulobNZ.png">
-    <title>Início | UltiChat</title>
+    <link rel="icon" href="/assets/images/logoSite.jpg">
+    <title>UltiChat</title>
 
 </head>
 <body>
 
     <div class="app">
+
+        <!-- ==================== TELA DE ENTRADA ==================== -->
         <div class="screen join-screen active">
             <div class="form">
-                <h2>Bem-Vindo ao UltiChat <img src="https://i.imgur.com/zulobNZ.png" style="width: 10%; vertical-align: -9px;"> !</h2>
+                <h2>Bem-vindo ao UltiChat <img src="/assets/images/logoSite.jpg" class="logo-inline"> !</h2>
                 <div class="form-input">
-                    <input type="text" id="username" placeholder="Usuário">
-                    <input type="password" id="password" placeholder="Senha">
+                    <input type="text" id="username" placeholder="Usuário" maxlength="20" autocomplete="off">
                 </div>
                 <div class="form-input">
                     <button id="join-user">Entrar</button>
                 </div>
             </div>
         </div>
+
+        <!-- ==================== TELA DO CHAT ==================== -->
         <div class="screen chat-screen">
-            <div class="header">
-                <div class="logo"> <p style="display: flex; align-items: center;"> <img src="https://i.imgur.com/zulobNZ.png" style="width: 5%; display: flex;"> ⠀UltiChat | Bate-Papo Geral</p></div>
-                <button id="exit-chat" title="Sair do Bate-Papo"><img src="https://i.imgur.com/ePlJ1oM.png" style="width: 70%;"></button>
+
+            <!-- HEADER -->
+    <div class="header">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button id="btn-toggle-left" title="Perfil">
+                <img src="/assets/images/profileIcon.png" style="filter:invert(1); width:55%;">
+            </button>
+            <div class="logo">
+                <img src="/assets/images/logoSite.jpg" class="header-logo">
+                UltiChat | Bate-Papo Geral
             </div>
-            <div class="messages">
-            </div>
-            <div class="typebox">
-                <button for="image-input" id="select-image" title="Enviar Imagem"><img src="https://i.imgur.com/cTgxRpl.png" style="width: 50%;"></button>
-                <input type="file" name="image-input" id="image-input" accept="image/jpeg, image/png">
-                <input type="text" id="message-input">
-                <button id="send-message" title="Enviar Mensagem"><img src="https://i.imgur.com/KQ24scD.png" style="width: 50%;"></button>
-            </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <button id="btn-toggle-right" title="Online">
+                <img src="/assets/images/profileIcon.png" style="filter:invert(1); width:55%;">
+            </button>
+            <button id="exit-chat" title="Sair">
+                <img src="/assets/images/exitChat.png">
+            </button>
         </div>
     </div>
 
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/assets/scripts/main-code.js"></script>
-    <script type="text/javascript" src="/assets/scripts/inspect-block-filter.js"></script>
+    <!-- Logo após <div class="chat-body"> -->
+    <div class="panel-overlay" id="panel-overlay"></div>
+
+            <!-- CORPO: esquerda + centro + direita -->
+            <div class="chat-body">
+
+                <!-- PAINEL ESQUERDO: perfil -->
+                <aside class="panel-left">
+                    <div class="profile-section">
+                        <div class="avatar-wrapper">
+                            <img id="preview-avatar" src="/assets/images/profileIcon.png" class="avatar-preview">
+                            <label for="avatar-input" class="avatar-edit-btn" title="Alterar foto">+</label>
+                            <input type="file" id="avatar-input" accept="image/jpeg, image/png, image/webp">
+                        </div>
+                        <div class="profile-name-display" id="profile-name-display"></div>
+                        <div class="profile-option">
+                            <label>Cor do nome</label>
+                            <input type="color" id="nick-color" value="#000000">
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- CENTRO: mensagens -->
+                <main class="chat-main">
+                    <div class="messages"></div>
+                    <div class="typebox">
+                        <button id="audio-btn" title="Gravar áudio">
+                            <img src="/assets/images/audioSend.png">
+                        </button>
+                        <button id="select-image" title="Enviar imagem">
+                            <img src="/assets/images/uploadImage.png">
+                        </button>
+                        <input type="file" id="image-input" accept="image/jpeg, image/png, image/webp">
+                        <input type="text" id="message-input" placeholder="Digite uma mensagem..." autocomplete="off">
+                        <button id="send-message" title="Enviar">
+                            <img src="/assets/images/sendMessage.png">
+                        </button>
+                    </div>
+                </main>
+
+                <!-- PAINEL DIREITO: usuários online -->
+                <aside class="panel-right">
+                    <div class="online-header">
+                        Online: <span id="online-count">0</span>
+                    </div>
+                    <ul class="online-list" id="online-list"></ul>
+                </aside>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/scripts/main-code.js"></script>
+    <script src="/assets/scripts/inspect-block-filter.js"></script>
 
 </body>
 </html>
