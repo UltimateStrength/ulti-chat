@@ -452,8 +452,8 @@ input[type="file"] {
     .panel-left {
         position: fixed;
         left: -220px;
-        top: 52px;
-        height: calc(100% - 52px);
+        top: 0;
+        height: 100%;
         width: 200px;
         z-index: 100;
         transition: left 0.25s ease;
@@ -467,8 +467,8 @@ input[type="file"] {
     .panel-right {
         position: fixed;
         right: -200px;
-        top: 52px;
-        height: calc(100% - 52px);
+        top: 0;
+        height: 100%;
         width: 180px;
         z-index: 100;
         transition: right 0.25s ease;
@@ -479,27 +479,21 @@ input[type="file"] {
         right: 0;
     }
 
-    .chat-main {
-        width: 100%;
-    }
-
-    /* Botões no header pra abrir os painéis */
-    #btn-toggle-left,
-    #btn-toggle-right {
-        display: flex;
-    }
-
-    /* Overlay escuro ao abrir painel */
     .panel-overlay {
         display: none;
         position: fixed;
-        inset: 52px 0 0 0;
+        inset: 0;
         background: rgba(0,0,0,0.4);
         z-index: 99;
     }
 
     .panel-overlay.active {
         display: block;
+    }
+
+    #btn-toggle-left,
+    #btn-toggle-right {
+        display: flex;
     }
 }
 
